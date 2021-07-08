@@ -26,24 +26,30 @@ const ComputerVisionClient =
 const ApiKeyCredentials = require("@azure/ms-rest-js").ApiKeyCredentials;
 
 require("dotenv").config({ path: "./config/.env" });
+const env = process.env;
 
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
+  cloud_name: env.CLOUD_NAME,
+  api_key: env.CLOUD_API_KEY,
+  api_secret: env.CLOUD_API_SECRET,
 });
 
-const key = process.env.MS_COMPUTER_VISION_SUBSCRIPTION_KEY;
-const endpoint = process.env.MS_COMPUTER_VISION_ENDPOINT;
-const faceEndpoint = process.env.MS_FACE_ENDPOINT;
-const subscriptionKey = process.env.MS_FACE_SUB_KEY;
+const cvKey = env.MS_COMPUTER_VISION_SUBSCRIPTION_KEY;
+const cvEndpoint = env.MS_COMPUTER_VISION_ENDPOINT;
+const faceKey = env.MS_FACE_SUB_KEY;
+const faceEndpoint = env.MS_FACE_ENDPOINT;
 
 const computerVisionClient = new ComputerVisionClient(
-  new ApiKeyCredentials({ inHeader: { "Ocp-Apim-Subscription-Key": key } }),
-  endpoint
+    new ApiKeyCredentials({ inHeader: { "Ocp-Apim-Subscription-Key": cvKey } }),
+    cvEndpoint
 );
+
+const face = new ComputerVisionClient(
+    new ApiKeyCredentials({ inHeader: {"Ocp-Apim-Subscription-Key": faceKey}}),
+    faceEndpoint
+)
 
 //Server Setup
 app.set("view engine", "ejs");
@@ -438,4 +444,4 @@ app.post("/", upload.single("file-to-upload"), async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT || 8000);
+app.listen(env.PORT || 8000);
