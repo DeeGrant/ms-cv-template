@@ -9,7 +9,13 @@
   <body>
     
       <img src="<%= img%>" alt="uploaded image" />
-
+      <ul>
+<!--          TODO: try out forEach & (for brand in brands)-->
+          <% for(let i = 0; i < brands.length(); i++){%>
+              <li><%= brands[i].name%> <%= brands[i].confidence.toFixed(2)%></li>
+          <% }%>
+      </ul>
+    <h1><%= brand[0].name%></h1>
       <form action="/" enctype="multipart/form-data" method="post">
       <input type="file" name="file-to-upload" />
       <input type="submit" value="Upload" />
